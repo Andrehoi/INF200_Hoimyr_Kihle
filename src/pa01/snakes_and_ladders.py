@@ -48,8 +48,6 @@ def player_turn(player, board):
     return player
 
 
-print(player_turn(['a', 0, 0], make_board()))
-
 
 def single_game(num_players):
 
@@ -92,16 +90,14 @@ def single_game(num_players):
         player_position.append([player, 0, 0])
 
     while True:
-        for player in range(len(player_position)):
+        for player in range(num_players):
             player_turn(player_position[player], board)
-
-        if player_position[0][1] < 90:
-            break
-
-    return player_position
+            if player_position[player][1] >= 90:
+                print(player_position)
+                return player_position[player][2]
 
 
-print(single_game(4))
+print(single_game(8))
 
 
 def multiple_games(num_games, num_players):

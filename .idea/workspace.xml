@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e895ab7-4965-4476-b245-b0aaf4728b19" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pa01/snakes_and_ladders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pa01/snakes_and_ladders.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pa01/snakes_and_ladders.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -100,6 +99,7 @@
       <updated>1570431362165</updated>
       <workItem from="1570431367306" duration="499000" />
       <workItem from="1570432860530" duration="1915000" />
+      <workItem from="1570441027554" duration="2730000" />
     </task>
     <task id="LOCAL−00001" summary="Made src and desired folders and files">
       <created>1570431494443</created>
@@ -131,7 +131,8 @@
     <option name="LAST_COMMIT_MESSAGE" value="Made src and desired folders and files" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/INF200_Hoimyr_Kihle$pytest_in_snakes_and_ladders_py.coverage" NAME="pytest in snakes_and_ladders.py Coverage Results" MODIFIED="1570432996265" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/INF200_Hoimyr_Kihle$snakes_and_ladders.coverage" NAME="snakes_and_ladders Coverage Results" MODIFIED="1570440176837" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pa01" />
+    <SUITE FILE_PATH="coverage/INF200_excercises_Andreas$snakes_and_ladders.coverage" NAME="snakes_and_ladders Coverage Results" MODIFIED="1570444364142" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pa01" />
+    <SUITE FILE_PATH="coverage/INF200_Hoimyr_Kihle$pytest_in_snakes_and_ladders_py.coverage" NAME="pytest in snakes_and_ladders.py Coverage Results" MODIFIED="1570432996265" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
