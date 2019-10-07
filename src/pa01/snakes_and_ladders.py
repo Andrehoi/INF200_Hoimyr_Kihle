@@ -15,19 +15,19 @@ def make_board():
     num_tiles[1] = 39
     num_tiles[9] = 2
     num_tiles[37] = 16
-    num_tiles[43] = 19
-    num_tiles[49] = 30
-    num_tiles[65] = 17
-    num_tiles[68] = 17
+    num_tiles[44] = 19
+    num_tiles[50] = 30
+    num_tiles[66] = 17
+    num_tiles[69] = 17
 
     """Makes chutes"""
-    num_tiles[24] = -19
-    num_tiles[33] = -30
-    num_tiles[42] = -12
-    num_tiles[56] = -19
-    num_tiles[64] = -37
-    num_tiles[74] = -62
-    num_tiles[87] = -17
+    num_tiles[25] = -19
+    num_tiles[34] = -30
+    num_tiles[43] = -12
+    num_tiles[57] = -19
+    num_tiles[65] = -37
+    num_tiles[75] = -62
+    num_tiles[88] = -17
 
     return num_tiles
 
