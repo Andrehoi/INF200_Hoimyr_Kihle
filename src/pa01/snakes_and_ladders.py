@@ -4,7 +4,6 @@ __author__ = 'sebastian kihle', 'andreas sandvik hoimyr'
 __email__ = 'sebaskih@nmbu.no', 'andrehoi@nmbu.no'
 
 
-
 def make_board():
     """Creates the game board with the desired ladders and snakes"""
     num_tiles = [0 for i in range(96)]
