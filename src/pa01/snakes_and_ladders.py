@@ -8,8 +8,8 @@ import numpy as np
 
 
 def make_board():
-    """Creates the game board with the desired ladders and snakes"""
-    num_tiles = [0 for i in range(96)]
+    """Creates the game board with the desired ladders and chutes"""
+    num_tiles = [0 for _ in range(96)]
 
     """Makes ladders"""
     num_tiles[1] = 39
@@ -38,7 +38,8 @@ def die_roll():
 
 
 def player_turn(player, board):
-    """Function that simulates one die throw for one player and move"""
+    """Function that simulates one die throw for one player and moves up or
+    down depending on the value of the position on the table"""
 
     roll = die_roll()
 
@@ -65,40 +66,27 @@ def single_game(num_players):
         Number of moves the winning player needed to reach the goal
     """
 
-    if type(num_players) == int:
-        pass
-
-    else:
-        print("Input is not a valid integer")
-        raise TypeError
-
-    if num_players > 8:
-        print("maximum 8 players")
-        return
-
-    if num_players <= 0:
-        print("mimimum 1 player")
-        return
-
     board = make_board()
-    players = ["PL1", "PL2", "PL3", "PL4", "PL5", "PL6", "PL7", "PL8"]
+    """Create list with all players named PL (1 to n)"""
+    game_players = []
+    for number in range(num_players):
+        game_players.append("PL {0}".format(number))
 
-    game_players = players[:num_players]
-
+    """Makes a list of lists that keeps track of player, position on the board 
+    and number of die throws"""
     player_position = []
 
     for player in game_players:
         player_position.append([player, 0, 0])
 
+    """Plays the game until a player reaches position 90 on the board or 
+    higher"""
     while True:
         for player in range(num_players):
             player_turn(player_position[player], board)
 
             if player_position[player][1] >= 90:
                 return player_position[player][2]
-
-
-print(single_game(8))
 
 
 def multiple_games(num_games, num_players):
@@ -118,23 +106,8 @@ def multiple_games(num_games, num_players):
          List with the number of moves needed in each game.
      """
 
-    if type(num_players) == int:
-        pass
-
-    else:
-        print("Input is not a valid integer")
-        raise ValueError
-
-    if num_players > 8:
-        print("maximum 8 players")
-        return
-
-    if num_players <= 0:
-        print("mimimum 1 player")
-        return
-
     moves = []
-    for games in range(num_games):
+    for _ in range(num_games):
         moves.append(single_game(num_players))
 
     return moves
@@ -162,30 +135,16 @@ def multi_game_experiment(num_games, num_players, seed):
     return multiple_games(num_games, num_players)
 
 
-def median(data):
-    """
-    Returns median of data.
-
-    :param data: An iterable of containing numbers
-    :return: Median of data
-
-    Source: https://github.com/yngvem/INF200-2019-Exercises/blob/master/
-    exersices/ex03.rst
-    """
-    if len(data) < 1:
-        raise ValueError
-
-    sdata = sorted(data)
-    n = len(sdata)
-    return (sdata[n//2] if n % 2 == 1
-            else 0.5 * (sdata[n//2 - 1] + sdata[n//2]))
-
-
-if '__name__' == '__main__':
-    games = multi_game_experiment(100, 4, random.randint())
+if __name__ == '__main__':
+    games = multi_game_experiment(100, 4, 73)
     shortest_duration = min(games)
     longest_duration = max(games)
     median_duration = np.median(games)
     mean_duration = np.mean(games)
-    standard_deviation = np.std(games)
-    print()
+    std_duration = np.std(games)
+
+    print("The shortest game was in {0:} throws, and longest in {1:} "
+          "throws.".format(shortest_duration, longest_duration))
+
+    print("The median was {0:}, {1:} as mean and {2:.2f} standard "
+          "deviation.".format(median_duration, mean_duration, std_duration))
