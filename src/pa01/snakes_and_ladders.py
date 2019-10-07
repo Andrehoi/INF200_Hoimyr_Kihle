@@ -3,11 +3,13 @@
 __author__ = 'sebastian kihle', 'andreas sandvik hoimyr'
 __email__ = 'sebaskih@nmbu.no', 'andrehoi@nmbu.no'
 
+import random
 
 def make_board():
     """Creates the game board with the desired ladders and snakes"""
     num_tiles = [0 for i in range(96)]
 
+    """Makes ladders"""
     num_tiles[1] = 39
     num_tiles[9] = 2
     num_tiles[37] = 16
@@ -16,6 +18,7 @@ def make_board():
     num_tiles[65] = 17
     num_tiles[68] = 17
 
+    """Makes chutes"""
     num_tiles[24] = -19
     num_tiles[33] = -30
     num_tiles[42] = -12
@@ -29,6 +32,26 @@ def make_board():
 
 print(make_board())
 
+
+def die_roll():
+    """Rolls die between 1 and 6"""
+    return random.randint(1,6)
+
+
+def player_turn(player, board):
+    if die_rolls == 0:
+        pos = 0
+
+    else:
+        pass
+
+
+    board[die_roll() + board[pos]] = player
+    die_rolls += 1
+    return board, die_rolls
+
+
+print(player_turn('a', make_board()))
 
 
 def single_game(num_players):
@@ -51,7 +74,30 @@ def single_game(num_players):
         pass
 
     else:
+        print("Input is not a valid integer")
         raise ValueError
+
+    if num_players > 8:
+        print("maximum 8 players")
+        return
+
+    if num_players <= 0:
+        print("mimimum 1 player")
+        return
+
+
+
+    players = ["a", "b", "c", "d", "e", "f", "g", "h"]
+
+    game_players = players[:num_players]
+
+    board = make_board()
+
+    for player in game_players:
+        player = player_turn(player)
+
+
+    return (game_players)
 
 
 
