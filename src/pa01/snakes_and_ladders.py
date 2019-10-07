@@ -39,19 +39,16 @@ def die_roll():
 
 
 def player_turn(player, board):
-    if die_rolls == 0:
-        pos = 0
 
-    else:
-        pass
+    roll = die_roll()
+    player[1] += roll + board[player[1] + roll]
 
+    player[2] += 1
 
-    board[die_roll() + board[pos]] = player
-    die_rolls += 1
-    return board, die_rolls
+    return player
 
 
-print(player_turn('a', make_board()))
+print(player_turn(['a', 0, 0], make_board()))
 
 
 def single_game(num_players):
@@ -85,20 +82,26 @@ def single_game(num_players):
         print("mimimum 1 player")
         return
 
-
-
-    players = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    board = make_board()
+    players = ["PL1", "PL2", "PL3", "PL4", "PL5", "PL6", "PL7", "PL8"]
 
     game_players = players[:num_players]
 
-    board = make_board()
-
+    player_position = []
     for player in game_players:
-        player = player_turn(player)
+        player_position.append([player, 0, 0])
+
+    while True:
+        for player in range(len(player_position)):
+            player_turn(player_position[player], board)
+
+        if player_position[0][1] < 90:
+            break
+
+    return player_position
 
 
-    return (game_players)
-
+print(single_game(4))
 
 
 def multiple_games(num_games, num_players):
