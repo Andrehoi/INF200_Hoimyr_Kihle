@@ -43,8 +43,12 @@ def player_turn(player, board):
 
     roll = die_roll()
 
+    """Moving the player forward equal to the die, and add the number of 
+    moves that the tile you land on have. Forward for ladders, backwards for
+    chutes"""
     player[1] += roll + board[player[1] + roll]
 
+    """Add to the die counter"""
     player[2] += 1
 
     return player
