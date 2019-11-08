@@ -44,13 +44,31 @@ class Player:
         self.position += thorw_die
         self.board.position_adjustment(self.position)
 
+
 class ResilientPlayer(Player):
-    def __init__(self, board, add_move=1):
+    def __init__(self, board, extra_steps=1):
         super().__init__(board)
-        self.add_move = add_move
+        self.add_move = extra_steps
+        self.prev_pos = 0
+        self.new_pos = 0
 
     def move_resilient(self):
 
+        self.position += random.randint(1, 6)
+
+        if self.board.position_adjustment(self.position) < self.position:
+            pass
+
+
+class LazyPlayer(Player):
+    def __init__(self, board, dropped_steps=1):
+        super().__init__(board)
+        self.red_move = dropped_steps
+
+    def move_lazy(self):
+        self.position += random.randint(1, 6)
+        if self.board.position_adjustment(self.position) > self.position:
+            pass
 
 
 
