@@ -5,12 +5,13 @@ __email__ = 'sebaskih@nmbu.no', 'andrehoi@nmbu.no'
 
 import random
 
+
 class Board:
 
-    def __init__(self, ladders=([1, 40],[9, 11],[37, 53],[44, 63],[50, 80],
-                                [66, 83],[69, 86]),
-                 chutes=([25, 6],[34, 4],[43, 31],[57, 38],[65, 28],[75, 13],
-                         [88,71]), goal=90):
+    def __init__(self, ladders=([1, 40], [9, 11], [37, 53], [44, 63], [50, 80],
+                                [66, 83], [69, 86]),
+                 chutes=([25, 6], [34, 4], [43, 31], [57, 38], [65, 28],
+                         [75, 13], [88, 71]), goal=90):
         self.board = []
         for tiles in range(96):
             self.board.append([tiles, 0])
@@ -26,12 +27,12 @@ class Board:
     def position_adjustment(self, position):
         for chute in self.chutes:
             if chute[0] == position:
-                return chute[1]
+                return chute[1] - chute[0]
 
         for ladder in self.ladders:
             if ladder[0] == position:
-                return ladder[1]
-        return position
+                return ladder[1] - chute[0]
+        return 0
 
 
 class Player:
@@ -49,47 +50,73 @@ class ResilientPlayer(Player):
     def __init__(self, board, extra_steps=1):
         super().__init__(board)
         self.add_move = extra_steps
-        self.prev_pos = 0
-        self.new_pos = 0
+        self.chuted = False
 
     def move_resilient(self):
 
         self.position += random.randint(1, 6)
+        self.position += self.board.position_adjustment(self.position)
+        if self.chuted:
+            self.position += self.add_move
+            self.chuted = False
 
-        if self.board.position_adjustment(self.position) < self.position:
-            pass
+        if self.board.position_adjustment(self.position) < 0:
+            self.chuted = True
 
 
 class LazyPlayer(Player):
     def __init__(self, board, dropped_steps=1):
         super().__init__(board)
         self.red_move = dropped_steps
+        self.laddered = False
 
     def move_lazy(self):
-        self.position += random.randint(1, 6)
-        if self.board.position_adjustment(self.position) > self.position:
-            pass
+        throw_die = random.randint(1, 6)
+        self.position += throw_die
+        self.position += self.board.position_adjustment(self.position)
+        if self.laddered:
+            if self.red_move < throw_die:
+                self.position -= self.red_move
+                self.laddered = False
+        else:
+            self.position -= throw_die
+
+        if self.position_adjustment() > 0:
+            self.laddered = True
 
 
 class Simulation:
     def __init__(self, *players, randomize_players=True):
         self.players = [players]
-        self.Lazy = LazyPlayer(Board())
-        self.Resilient = ResilientPlayer(Board())
+        self.lazy = LazyPlayer(Board())
+        self.resilient = ResilientPlayer(Board())
         self.play = Player(Board())
 
     def single_game(self):
-
+        lazy_counter = 0
+        resilient_counter = 0
+        player_counter = 0
         while True:
             for player in self.players:
-                player.move()
-                player.position_adjustment()
-                player.goal_reached()
-                if type(player) == type(self.Lazy):
 
+                if type(player) == type(self.lazy):
+                    player.move_lazy()
+                    lazy_counter += 1
 
+                    if player.goal_reached():
+                        return 'LazyPlayer', lazy_counter
 
-        pass
+                if type(player) == type(self.resilient):
+                    player.move_resilient()
+                    resilient_counter += 1
+                    if player.goal_reached():
+                        return 'ResilientPlayer', resilient_counter
+
+                if type(player) == type(self.play):
+                    player.move()
+                    player_counter += 1
+                    if player.goal_reached():
+                        return 'Player', player_counter
 
     def run_simulation(self):
         pass
@@ -111,4 +138,3 @@ g = LazyPlayer(Board())
 p = ResilientPlayer(Board())
 print(type(g))
 print(type(p))
-
