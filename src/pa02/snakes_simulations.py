@@ -12,9 +12,9 @@ class Board:
                                 [66, 83], [69, 86]),
                  chutes=([25, 6], [34, 4], [43, 31], [57, 38], [65, 28],
                          [75, 13], [88, 71]), goal=90):
-        self.board = []
+        self.sheet = []
         for tiles in range(96):
-            self.board.append([tiles, 0])
+            self.sheet.append([tiles, 0])
         self.ladders = ladders
         self.chutes = chutes
         self.goal = goal
@@ -43,7 +43,8 @@ class Player:
     def move(self):
         thorw_die = random.randint(1, 6)
         self.position += thorw_die
-        self.board.position_adjustment(self.position)
+        self.poistion += self.board.position_adjustment(self.position)
+        self.board.sheet[self.position][1] = 1
 
 
 class ResilientPlayer(Player):
@@ -99,20 +100,19 @@ class Simulation:
         while True:
             for player in self.players:
 
-                if type(player) == type(self.lazy):
+                if isinstance(type(player), type(self.lazy)):
                     player.move_lazy()
                     lazy_counter += 1
-
                     if player.goal_reached():
                         return 'LazyPlayer', lazy_counter
 
-                if type(player) == type(self.resilient):
+                if isinstance(type(player), type(self.resilient)):
                     player.move_resilient()
                     resilient_counter += 1
                     if player.goal_reached():
                         return 'ResilientPlayer', resilient_counter
 
-                if type(player) == type(self.play):
+                if isinstance(type(player), type(self.play)):
                     player.move()
                     player_counter += 1
                     if player.goal_reached():
@@ -134,7 +134,5 @@ class Simulation:
         pass
 
 
-g = LazyPlayer(Board())
-p = ResilientPlayer(Board())
-print(type(g))
-print(type(p))
+sim = Simulation(LazyPlayer, Player)
+print(sim.single_game())
