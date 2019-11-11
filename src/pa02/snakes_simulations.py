@@ -53,7 +53,7 @@ class ResilientPlayer(Player):
         self.add_move = extra_steps
         self.chuted = False
 
-    def move_resilient(self):
+    def move(self):
 
         self.position += random.randint(1, 6)
         self.position += self.board.position_adjustment(self.position)
@@ -71,7 +71,7 @@ class LazyPlayer(Player):
         self.red_move = dropped_steps
         self.laddered = False
 
-    def move_lazy(self):
+    def move(self):
         throw_die = random.randint(1, 6)
         self.position += throw_die
         self.position += self.board.position_adjustment(self.position)
@@ -101,13 +101,13 @@ class Simulation:
             for player in self.players:
 
                 if isinstance(type(player), type(self.lazy)):
-                    player.move_lazy()
+                    player.move()
                     lazy_counter += 1
                     if player.goal_reached():
                         return 'LazyPlayer', lazy_counter
 
                 if isinstance(type(player), type(self.resilient)):
-                    player.move_resilient()
+                    player.move()
                     resilient_counter += 1
                     if player.goal_reached():
                         return 'ResilientPlayer', resilient_counter
