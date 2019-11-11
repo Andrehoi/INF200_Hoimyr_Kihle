@@ -71,4 +71,44 @@ class LazyPlayer(Player):
             pass
 
 
+class Simulation:
+    def __init__(self, *players, randomize_players=True):
+        self.players = [players]
+        self.Lazy = LazyPlayer(Board())
+        self.Resilient = ResilientPlayer(Board())
+        self.play = Player(Board())
+
+    def single_game(self):
+
+        while True:
+            for player in self.players:
+                player.move()
+                player.position_adjustment()
+                player.goal_reached()
+                if type(player) == type(self.Lazy):
+
+
+
+        pass
+
+    def run_simulation(self):
+        pass
+
+    def get_results(self):
+        pass
+
+    def winners_per_type(self):
+        pass
+
+    def durations_per_type(self):
+        pass
+
+    def players_per_type(self):
+        pass
+
+
+g = LazyPlayer(Board())
+p = ResilientPlayer(Board())
+print(type(g))
+print(type(p))
 
