@@ -30,7 +30,7 @@ class Board:
 
         for ladder in self.ladders:
             if ladder[0] == position:
-                return ladder[1] - chute[0]
+                return ladder[1] - ladder[0]
         return 0
 
 
@@ -44,7 +44,6 @@ class Player:
         thorw_die = random.randint(1, 6)
         self.position += thorw_die
         self.position += self.board.position_adjustment(self.position)
-
 
     def step_counter(self):
         self.player_counter += 1
@@ -103,12 +102,16 @@ class LazyPlayer(Player):
 class Simulation:
     def __init__(self, player_field=[Player, LazyPlayer],
                  board=Board(), seed=0, randomize_players=True):
-        self.players = player_field
         self.board = board
         self.lazy = LazyPlayer(Board())
         self.resilient = ResilientPlayer(Board())
         self.play = Player(Board())
         self.seed = random.seed(seed)
+
+        self.players = []
+        for i in player_field:
+            j = i
+            self.players.append(j)
 
         if randomize_players:
             pass
@@ -122,7 +125,7 @@ class Simulation:
                 player.step_counter()
 
                 if self.board.goal_reached(player.position):
-                    return player.step_counter() - 1, player.__name__
+                    return 1, player.__name__
 
 
     def run_simulation(self):
@@ -142,5 +145,6 @@ class Simulation:
 
 
 sim = Simulation()
-print(sim.players)
+
+
 print(sim.single_game())
