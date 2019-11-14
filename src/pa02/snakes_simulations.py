@@ -103,42 +103,55 @@ class Simulation:
     def __init__(self, player_field=[Player, LazyPlayer],
                  board=Board(), seed=0, randomize_players=True):
         self.board = board
-        self.lazy = LazyPlayer(Board())
-        self.resilient = ResilientPlayer(Board())
-        self.play = Player(Board())
         self.seed = random.seed(seed)
+        self.gamelist = []
 
         self.players = []
-        for i in player_field:
-            j = i
-            self.players.append(j)
+        for classes in player_field:
+            player = classes(self.board)
+            self.players.append(player)
 
         if randomize_players:
             pass
 
     def single_game(self):
+        print(self.players)
+        while True:
+            for p in self.players:
 
-        while False:
-            for player in self.players:
+                p.move()
+                p.step_counter()
 
-                player.move()
-                player.step_counter()
-
-                if self.board.goal_reached(player.position):
-                    return 1, player.__name__
+                if not self.board.goal_reached(p.position):
+                    return p.step_counter() - 1, type(p).__name__
 
 
-    def run_simulation(self):
-        pass
+    def run_simulation(self, n_games):
+        for _ in range(n_games):
+            self.gamelist.append(self.single_game())
 
     def get_results(self):
-        pass
+        return self.gamelist
 
     def winners_per_type(self):
-        pass
+        win_player  = self.gamelist.count('Player')
+        win_lazy = self.gamelist.count('LazyPlayer')
+        win_resilient =  self.gamelist.count('ResilientPlayer')
+        winner_dict = {'Player': win_player, 'LazyPlayer': win_lazy,
+        'ResilientPlayer': win_resilient}
+        return winner_dict
 
     def durations_per_type(self):
-        pass
+        player_type = []
+        moves = []
+        for steps in self.gamelist:
+            player_type.append(steps[1])
+            moves.append(steps[0])
+
+
+
+
+
 
     def players_per_type(self):
         pass
