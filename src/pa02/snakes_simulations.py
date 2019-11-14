@@ -115,14 +115,13 @@ class Simulation:
             pass
 
     def single_game(self):
-        print(self.players)
         while True:
             for p in self.players:
 
                 p.move()
                 p.step_counter()
 
-                if not self.board.goal_reached(p.position):
+                if self.board.goal_reached(p.position):
                     return p.step_counter() - 1, type(p).__name__
 
 
@@ -134,30 +133,39 @@ class Simulation:
         return self.gamelist
 
     def winners_per_type(self):
-        win_player  = self.gamelist.count('Player')
+        win_player = self.gamelist.count('Player')
         win_lazy = self.gamelist.count('LazyPlayer')
-        win_resilient =  self.gamelist.count('ResilientPlayer')
+        win_resilient = self.gamelist.count('ResilientPlayer')
         winner_dict = {'Player': win_player, 'LazyPlayer': win_lazy,
         'ResilientPlayer': win_resilient}
         return winner_dict
 
     def durations_per_type(self):
-        player_type = []
-        moves = []
+        player_moves = []
+        lazy_moves = []
+        resilient_moves = []
         for steps in self.gamelist:
-            player_type.append(steps[1])
-            moves.append(steps[0])
+            if 'Player' in steps:
+                player_moves.append(steps[0])
+            if 'LazyPlayer' in steps:
+                lazy_moves.append(steps[0])
+            if'ResilientPlayer' in steps:
+                resilient_moves.append(steps[0])
 
-
-
-
-
+        game_durations = {'Player': player_moves, 'LazyPlayer': lazy_moves,
+                          'ResilientPlayer': resilient_moves}
+        return game_durations
 
     def players_per_type(self):
-        pass
+        return {'Player': self.players.count('Player'),
+                'LazyPlayer': self.players.count('LazyPlayer'),
+                'ResilientPlayer': self.players.count('ResilientPlayer')}
 
 
 sim = Simulation()
 
 
 print(sim.single_game())
+sim.run_simulation(20)
+print(sim.get_results())
+print(sim.durations_per_type())
