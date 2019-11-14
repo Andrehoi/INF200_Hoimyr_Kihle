@@ -101,9 +101,8 @@ class LazyPlayer(Player):
 
 
 class Simulation:
-    def __init__(self, player_field=[Player(), LazyPlayer()],
-                 board=Board(), seed=0,
-                 randomize_players=True):
+    def __init__(self, player_field=[Player, LazyPlayer],
+                 board=Board(), seed=0, randomize_players=True):
         self.players = player_field
         self.board = board
         self.lazy = LazyPlayer(Board())
@@ -112,7 +111,7 @@ class Simulation:
         self.seed = random.seed(seed)
 
         if randomize_players:
-            random.shuffle(self.players)
+            pass
 
     def single_game(self):
 
@@ -122,9 +121,8 @@ class Simulation:
                 player.move()
                 player.step_counter()
 
-                if board.goal_reached(player.position):
-                    return print(' Player {0} wins in {1} moves'.format(
-                        player, player.step_counter))
+                if self.board.goal_reached(player.position):
+                    return player.step_counter() - 1, player.__name__
 
 
     def run_simulation(self):
@@ -143,5 +141,6 @@ class Simulation:
         pass
 
 
-sim = Simulation(LazyPlayer, Player)
+sim = Simulation()
+print(sim.players)
 print(sim.single_game())
