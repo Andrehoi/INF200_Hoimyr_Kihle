@@ -5,7 +5,6 @@ __email__ = 'sebaskih@nmbu.no', 'andrehoi@nmbu.no'
 
 import random
 
-
 class Board:
 
     def __init__(self, ladders=([1, 40], [9, 11], [37, 53], [44, 63], [50, 80],
@@ -19,10 +18,10 @@ class Board:
         self.chutes = chutes
         self.goal = goal
 
-    def goal_reached(self, *args):
-        if args is not None:
+    def goal_reached(self, position):
+        if position >= self.goal:
             return True
-        return not self.board[self.goal][1] == 0
+        return False
 
     def position_adjustment(self, position):
         for chute in self.chutes:
@@ -39,12 +38,17 @@ class Player:
     def __init__(self, board):
         self.board = board
         self.position = 0
+        self.player_counter = 0
 
     def move(self):
         thorw_die = random.randint(1, 6)
         self.position += thorw_die
-        self.poistion += self.board.position_adjustment(self.position)
-        self.board.sheet[self.position][1] = 1
+        self.position += self.board.position_adjustment(self.position)
+
+
+    def step_counter(self):
+        self.player_counter += 1
+        return self.player_counter
 
 
 class ResilientPlayer(Player):
@@ -52,6 +56,7 @@ class ResilientPlayer(Player):
         super().__init__(board)
         self.add_move = extra_steps
         self.chuted = False
+        self.resilient_counter = 0
 
     def move(self):
 
@@ -64,12 +69,17 @@ class ResilientPlayer(Player):
         if self.board.position_adjustment(self.position) < 0:
             self.chuted = True
 
+    def step_counter(self):
+        self.resilient_counter += 1
+        return self.resilient_counter
+
 
 class LazyPlayer(Player):
     def __init__(self, board, dropped_steps=1):
         super().__init__(board)
         self.red_move = dropped_steps
         self.laddered = False
+        self.lazy_counter = 0
 
     def move(self):
         throw_die = random.randint(1, 6)
@@ -82,41 +92,40 @@ class LazyPlayer(Player):
         else:
             self.position -= throw_die
 
-        if self.position_adjustment() > 0:
+        if self.board.position_adjustment(self.position) > 0:
             self.laddered = True
+
+    def step_counter(self):
+        self.lazy_counter += 1
+        return self.lazy_counter
 
 
 class Simulation:
-    def __init__(self, *players, randomize_players=True):
-        self.players = [players]
+    def __init__(self, player_field=[Player(), LazyPlayer()],
+                 board=Board(), seed=0,
+                 randomize_players=True):
+        self.players = player_field
+        self.board = board
         self.lazy = LazyPlayer(Board())
         self.resilient = ResilientPlayer(Board())
         self.play = Player(Board())
+        self.seed = random.seed(seed)
+
+        if randomize_players:
+            random.shuffle(self.players)
 
     def single_game(self):
-        lazy_counter = 0
-        resilient_counter = 0
-        player_counter = 0
-        while True:
+
+        while False:
             for player in self.players:
 
-                if isinstance(type(player), type(self.lazy)):
-                    player.move()
-                    lazy_counter += 1
-                    if player.goal_reached():
-                        return 'LazyPlayer', lazy_counter
+                player.move()
+                player.step_counter()
 
-                if isinstance(type(player), type(self.resilient)):
-                    player.move()
-                    resilient_counter += 1
-                    if player.goal_reached():
-                        return 'ResilientPlayer', resilient_counter
+                if board.goal_reached(player.position):
+                    return print(' Player {0} wins in {1} moves'.format(
+                        player, player.step_counter))
 
-                if isinstance(type(player), type(self.play)):
-                    player.move()
-                    player_counter += 1
-                    if player.goal_reached():
-                        return 'Player', player_counter
 
     def run_simulation(self):
         pass
