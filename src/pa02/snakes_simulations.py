@@ -12,9 +12,6 @@ class Board:
                                 [66, 83], [69, 86]),
                  chutes=([25, 6], [34, 4], [43, 31], [57, 38], [65, 28],
                          [75, 13], [88, 71]), goal=90):
-        self.sheet = []
-        for tiles in range(96):
-            self.sheet.append([tiles, 0])
         self.ladders = ladders
         self.chutes = chutes
         self.goal = goal
@@ -43,11 +40,11 @@ class Player:
 
     def move(self):
         thorw_die = random.randint(1, 6)
+        self.player_counter += 1
         self.position += thorw_die
         self.position += self.board.position_adjustment(self.position)
 
     def step_counter(self):
-        self.player_counter += 1
         return self.player_counter
 
 
@@ -61,8 +58,10 @@ class ResilientPlayer(Player):
     def move(self):
 
         self.position += random.randint(1, 6)
+        self.resilient_counter += 1
         move_adjustment = self.board.position_adjustment(self.position)
         self.position += move_adjustment
+
         if self.chuted:
             self.position += self.add_move
             self.chuted = False
@@ -71,7 +70,6 @@ class ResilientPlayer(Player):
             self.chuted = True
 
     def step_counter(self):
-        self.resilient_counter += 1
         return self.resilient_counter
 
 
@@ -86,6 +84,7 @@ class LazyPlayer(Player):
 
         throw_die = random.randint(1, 6)
         self.position += throw_die
+        self.lazy_counter += 1
 
         move_adjustment = self.board.position_adjustment(self.position)
         self.position += move_adjustment
@@ -123,12 +122,10 @@ class Simulation:
     def single_game(self):
         while True:
             for p in self.players:
-
                 p.move()
-                p.step_counter()
 
                 if self.board.goal_reached(p.position):
-                    return p.step_counter() - 1, type(p).__name__
+                    return p.step_counter(), type(p).__name__
 
     def run_simulation(self, n_games):
         for _ in range(n_games):
