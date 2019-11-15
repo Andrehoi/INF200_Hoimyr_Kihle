@@ -174,9 +174,20 @@ class Simulation:
         return game_durations
 
     def players_per_type(self):
-        return {'Player': self.players.count('Player'),
-                'LazyPlayer': self.players.count('LazyPlayer'),
-                'ResilientPlayer': self.players.count('ResilientPlayer')}
+        lazy_players = 0
+        resilient_players = 0
+        player_players = 0
+        for player in self.players:
+            if type(player).__name__ == 'Player':
+                player_players += 1
+            if type(player).__name__ == 'LazyPlayer':
+                lazy_players += 1
+            if type(player).__name__ == 'ResilientPlayer':
+                resilient_players += 1
+
+        the_dict = {'Player': player_players, 'LazyPlayer': lazy_players,
+                       'ResilientPlayer': resilient_players}
+        return the_dict
 
 
 sim = Simulation([Player, LazyPlayer, ResilientPlayer, LazyPlayer, Player])

@@ -88,11 +88,33 @@ class TestTheSimulator:
         assert len(sim.game_list) == 5
 
     def test_winners_per_type(self):
-        board = cs.Board()
-        sim = cs.Simulation(player_field=[cs.Player(board), cs.Player(board),
-                                          cs.Player(board)])
+        sim = cs.Simulation(player_field=[cs.Player, cs.Player,
+                                          cs.Player])
         sim.run_simulation(3)
-        assert sim.winners_per_type().values() == 3
+        the_dictionary = sim.winners_per_type()
+        assert the_dictionary['Player'] == 3
+        assert the_dictionary['ResilientPlayer'] == 0
+        assert the_dictionary['LazyPlayer'] == 0
+
+    def test_durations_per_type(self):
+        sim = cs.Simulation(player_field=[cs.Player, cs.LazyPlayer,
+                                          cs.ResilientPlayer])
+        sim.run_simulation(5)
+        the_dict = sim.durations_per_type()
+        values = the_dict.values()
+        for lists in values:
+            for numbers in lists:
+                assert numbers >= 4
+
+    def test_players_per_type(self):
+        sim = cs.Simulation(player_field=[cs.Player, cs.LazyPlayer,
+                                          cs.ResilientPlayer, cs.LazyPlayer,
+                                          cs.ResilientPlayer, cs.LazyPlayer])
+        the_dict = sim.players_per_type()
+        assert the_dict['Player'] == 1
+        assert the_dict['ResilientPlayer'] == 2
+        assert the_dict['LazyPlayer'] == 3
+
 
 
 
