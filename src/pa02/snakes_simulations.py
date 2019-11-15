@@ -36,16 +36,18 @@ class Player:
     def __init__(self, board):
         self.board = board
         self.position = 0
-        self.player_counter = 0
+        self.counter = 0
 
     def move(self):
-        thorw_die = random.randint(1, 6)
-        self.player_counter += 1
-        self.position += thorw_die
+        throw_die = random.randint(1, 6)
+        self.position += throw_die
+        self.counter += 1
+        print(self.position)
+
         self.position += self.board.position_adjustment(self.position)
 
     def step_counter(self):
-        return self.player_counter
+        return self.counter
 
 
 class ResilientPlayer(Player):
@@ -53,12 +55,12 @@ class ResilientPlayer(Player):
         super().__init__(board)
         self.add_move = extra_steps
         self.chuted = False
-        self.resilient_counter = 0
+        self.counter = 0
 
     def move(self):
 
         self.position += random.randint(1, 6)
-        self.resilient_counter += 1
+        self.counter += 1
         move_adjustment = self.board.position_adjustment(self.position)
         self.position += move_adjustment
 
@@ -70,7 +72,7 @@ class ResilientPlayer(Player):
             self.chuted = True
 
     def step_counter(self):
-        return self.resilient_counter
+        return self.counter
 
 
 class LazyPlayer(Player):
@@ -78,13 +80,13 @@ class LazyPlayer(Player):
         super().__init__(board)
         self.red_move = dropped_steps
         self.laddered = False
-        self.lazy_counter = 0
+        self.counter = 0
 
     def move(self):
 
         throw_die = random.randint(1, 6)
         self.position += throw_die
-        self.lazy_counter += 1
+        self.counter += 1
 
         move_adjustment = self.board.position_adjustment(self.position)
         self.position += move_adjustment
@@ -100,8 +102,7 @@ class LazyPlayer(Player):
             self.laddered = True
 
     def step_counter(self):
-        self.lazy_counter += 1
-        return self.lazy_counter
+        return self.counter
 
 
 class Simulation:
@@ -125,7 +126,11 @@ class Simulation:
                 p.move()
 
                 if self.board.goal_reached(p.position):
-                    return p.step_counter(), type(p).__name__
+                    for i in self.players:
+                        i.position = 0
+                        steps = i.counter
+                        i.counter = 0
+                    return steps, type(p).__name__
 
     def run_simulation(self, n_games):
         for _ in range(n_games):
@@ -164,11 +169,12 @@ class Simulation:
                 'ResilientPlayer': self.players.count('ResilientPlayer')}
 
 
-sim = Simulation([LazyPlayer, ResilientPlayer, Player])
+sim = Simulation([Player, LazyPlayer, ResilientPlayer])
 
 
 print(sim.single_game())
-sim.run_simulation(100)
+sim.run_simulation(20)
 print(sim.get_results())
 print(sim.durations_per_type())
 print(sim.players_per_type())
+

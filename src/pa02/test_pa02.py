@@ -31,16 +31,21 @@ class TestTheBoard:
 class TestThePlayer:
 
     def test_player_starts_at_0(self):
-        board = cs.Board
+        board = cs.Board()
         player = cs.Player(board)
         assert player.position == 0
 
-    def test_player_move_counter(self):
-        board = cs.Board
+    def test_moves(self):
+
+        board = cs.Board()
         player = cs.Player(board)
+
         player.move()
         player.move()
-        assert player.step_counter() > 2
+
+        assert player.step_counter() == 2
+
+
 
 
 
