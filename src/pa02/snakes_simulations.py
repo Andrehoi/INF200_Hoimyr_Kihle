@@ -92,9 +92,10 @@ class LazyPlayer(Player):
         if self.laddered:
             if self.red_move < throw_die:
                 self.position -= self.red_move
-                self.laddered = False
             else:
                 self.position -= throw_die
+
+            self.laddered = False
 
         if move_adjustment > 0:
             self.laddered = True
@@ -108,7 +109,7 @@ class Simulation:
                  board=Board(), seed=3, randomize_players=True):
         self.board = board
         self.seed = random.seed(seed)
-        self.gamelist = []
+        self.game_list = []
 
         self.players = []
         for classes in player_field:
@@ -133,24 +134,34 @@ class Simulation:
 
     def run_simulation(self, n_games):
         for _ in range(n_games):
-            self.gamelist.append(self.single_game())
+            self.game_list.append(self.single_game())
 
     def get_results(self):
-        return self.gamelist
+        return self.game_list
 
     def winners_per_type(self):
-        win_player = self.gamelist.count('Player')
-        win_lazy = self.gamelist.count('LazyPlayer')
-        win_resilient = self.gamelist.count('ResilientPlayer')
+
+        win_lazy = 0
+        win_resilient = 0
+        win_player = 0
+        for steps in self.game_list:
+            if 'Player' in steps:
+                win_player += 1
+            if 'LazyPlayer' in steps:
+                win_lazy += 1
+            if'ResilientPlayer' in steps:
+                win_resilient += 1
+
         winner_dict = {'Player': win_player, 'LazyPlayer': win_lazy,
                        'ResilientPlayer': win_resilient}
+
         return winner_dict
 
     def durations_per_type(self):
         player_moves = []
         lazy_moves = []
         resilient_moves = []
-        for steps in self.gamelist:
+        for steps in self.game_list:
             if 'Player' in steps:
                 player_moves.append(steps[0])
             if 'LazyPlayer' in steps:
@@ -168,12 +179,11 @@ class Simulation:
                 'ResilientPlayer': self.players.count('ResilientPlayer')}
 
 
-sim = Simulation([Player, LazyPlayer, ResilientPlayer])
+sim = Simulation([Player, LazyPlayer, ResilientPlayer, LazyPlayer, Player])
 
-
-print(sim.single_game())
 sim.run_simulation(20)
-print(sim.get_results())
+print(sim.game_list)
+print(sim.winners_per_type())
 print(sim.durations_per_type())
 print(sim.players_per_type())
 

@@ -57,6 +57,8 @@ class TestThePlayer:
         player.move()
         player.move()
         assert player.position >= 21
+        player.move()
+        assert player.position >= 27
 
     def test_lazy_player_moves(self):
         board = cs.Board()
@@ -73,12 +75,24 @@ class TestThePlayer:
         player.move()
         player.move()
         assert player.position <= 11
+        player.move()
+        assert player.position >= 11
 
 
 class TestTheSimulator:
 
+    def test_run_simulation(self):
+        game_board = cs.Board()
+        sim = cs.Simulation(board=game_board)
+        sim.run_simulation(5)
+        assert len(sim.game_list) == 5
 
-
+    def test_winners_per_type(self):
+        board = cs.Board()
+        sim = cs.Simulation(player_field=[cs.Player(board), cs.Player(board),
+                                          cs.Player(board)])
+        sim.run_simulation(3)
+        assert sim.winners_per_type().values() == 3
 
 
 
