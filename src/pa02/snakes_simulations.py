@@ -120,16 +120,18 @@ class Simulation:
             random.shuffle(self.players)
 
     def single_game(self):
+        steps = 0
         while True:
             for p in self.players:
                 p.move()
                 # Check winning condition
                 if self.board.goal_reached(p.position):
                     # reset the step counters and positions for all players
-                    for i in self.players:
-                        i.position = 0
-                        steps = i.counter
-                        i.counter = 0
+                    for player in self.players:
+                        player.position = 0
+                        steps = player.counter
+                        player.counter = 0
+
                     return steps, type(p).__name__
 
     def run_simulation(self, n_games):
@@ -186,15 +188,5 @@ class Simulation:
                 resilient_players += 1
 
         the_dict = {'Player': player_players, 'LazyPlayer': lazy_players,
-                       'ResilientPlayer': resilient_players}
+                    'ResilientPlayer': resilient_players}
         return the_dict
-
-
-sim = Simulation([Player, LazyPlayer, ResilientPlayer, LazyPlayer, Player])
-
-sim.run_simulation(20)
-print(sim.game_list)
-print(sim.winners_per_type())
-print(sim.durations_per_type())
-print(sim.players_per_type())
-

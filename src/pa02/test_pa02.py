@@ -3,7 +3,6 @@
 __author__ = 'sebastian kihle', 'andreas sandvik hoimyr'
 __email__ = 'sebaskih@nmbu.no', 'andrehoi@nmbu.no'
 
-import pytest
 import snakes_simulations as cs
 
 
@@ -114,16 +113,3 @@ class TestTheSimulator:
         assert the_dict['Player'] == 1
         assert the_dict['ResilientPlayer'] == 2
         assert the_dict['LazyPlayer'] == 3
-
-
-
-
-
-
-
-
-
-
-
-
-
