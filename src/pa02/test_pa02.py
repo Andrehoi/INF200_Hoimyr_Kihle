@@ -35,15 +35,52 @@ class TestThePlayer:
         player = cs.Player(board)
         assert player.position == 0
 
-    def test_moves(self):
-
+    def test_player_moves(self):
         board = cs.Board()
         player = cs.Player(board)
-
         player.move()
         player.move()
-
         assert player.step_counter() == 2
+        assert player.step_counter() >= 2
+
+    def test_resilient_player_moves(self):
+        board = cs.Board()
+        player = cs.ResilientPlayer(board)
+        player.move()
+        player.move()
+        assert player.step_counter() == 2
+        assert player.step_counter() >= 2
+
+    def test_resilience(self):
+        board = cs.Board(chutes=([6, 1], [5, 1], [4, 1], [3, 1], [2, 1]))
+        player = cs.ResilientPlayer(board, extra_steps=20)
+        player.move()
+        player.move()
+        assert player.position >= 21
+
+    def test_lazy_player_moves(self):
+        board = cs.Board()
+        player = cs.LazyPlayer(board)
+        player.move()
+        player.move()
+        assert player.step_counter() == 2
+        assert player.step_counter() >= 2
+
+    def test_laziness(self):
+        board = cs.Board(ladders=([1, 10], [2, 10], [3, 10], [4, 10],
+                                  [5, 10], [6, 10]))
+        player = cs.LazyPlayer(board, dropped_steps=5)
+        player.move()
+        player.move()
+        assert player.position <= 11
+
+
+class TestTheSimulator:
+
+
+
+
+
 
 
 

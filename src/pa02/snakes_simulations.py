@@ -42,8 +42,6 @@ class Player:
         throw_die = random.randint(1, 6)
         self.position += throw_die
         self.counter += 1
-        print(self.position)
-
         self.position += self.board.position_adjustment(self.position)
 
     def step_counter(self):
@@ -118,14 +116,15 @@ class Simulation:
             self.players.append(player)
 
         if randomize_players:
-            pass
+            random.shuffle(self.players)
 
     def single_game(self):
         while True:
             for p in self.players:
                 p.move()
-
+                # Check winning condition
                 if self.board.goal_reached(p.position):
+                    # reset the step counters and positions for all players
                     for i in self.players:
                         i.position = 0
                         steps = i.counter
